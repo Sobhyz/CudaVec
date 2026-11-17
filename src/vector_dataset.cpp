@@ -1,6 +1,6 @@
-#pragma once
 
-#include "include/vector_dataset.h"
+
+#include "vector_dataset.h"
 #include <cmath>
 #include <stdexcept>
 
@@ -60,4 +60,16 @@ VecDB::VecDB(std::vector<float> const &db, std::size_t dim){
     for(std::size_t i=0;i<vec_count;i++){
         this->add_vector(db.begin()+(i*dim));
     }
+}
+
+std::size_t VecDB::get_dimensions() const noexcept {
+    return dimensions;
+}
+
+std::size_t VecDB::size() const noexcept {
+    return db.size() / dimensions;
+}
+
+const std::vector<float>& VecDB::data() const noexcept {
+    return db;
 }

@@ -10,9 +10,13 @@ struct VecDB{
         std::vector<float> db;
         
     public:
-        void add_vector(std::vector<float> &vec);
+        std::size_t get_dimensions() const noexcept;
+        std::size_t size() const noexcept;
+        const std::vector<float>& data() const noexcept;
+
+        void add_vector(std::vector<float> vec);
         void add_vector(std::vector<float>::const_iterator it);
-        void normalize_vector(std::vector<float> vec);
+        void normalize_vector(std::vector<float> &vec);
         VecDB(std::size_t dim);
         VecDB(std::size_t num_vectors, std::size_t dim);
         VecDB(std::vector<float> const &db, std::size_t dim);
