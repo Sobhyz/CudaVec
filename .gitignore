@@ -1,7 +1,9 @@
 build/
+hello_cuda
 *.o
 *.a
 *.so
 *.out
+*.exe
 .cache/
 compile_commands.json
