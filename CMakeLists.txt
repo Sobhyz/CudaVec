@@ -14,6 +14,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Core library
 add_library(cudavec_core
     src/vector_dataset.cpp
+    src/similarity.cpp
+    src/utility.cpp
 )
 
 # Public headers
@@ -40,6 +42,14 @@ target_link_libraries(test_vec_db
     PRIVATE cudavec_core
 )
 
+add_executable(test_similarity
+    tests/test_similarity.cpp
+)
+
+target_link_libraries(test_similarity
+    PRIVATE cudavec_core
+)
+
 # Enable CTest
 include(CTest)
 
@@ -47,5 +57,12 @@ if(BUILD_TESTING)
     add_test(
         NAME VecDBTests
         COMMAND test_vec_db
+    )
+endif()
+
+if(BUILD_TESTING)
+    add_test(
+        NAME SimilarityTests
+        COMMAND test_similarity
     )
 endif()
