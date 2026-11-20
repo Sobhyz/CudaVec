@@ -6,6 +6,18 @@ project(CudaVec
     LANGUAGES CXX
 )
 
+include(FetchContent)
+
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+set(JSON_Install OFF CACHE INTERNAL "")
+
+FetchContent_Declare(
+    json
+    URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+)
+
+FetchContent_MakeAvailable(json)
+
 # C++ configuration
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -16,6 +28,10 @@ add_library(cudavec_core
     src/vector_dataset.cpp
     src/similarity.cpp
     src/utility.cpp
+)
+target_link_libraries(cudavec_core
+    PRIVATE
+        nlohmann_json::nlohmann_json
 )
 
 # Public headers

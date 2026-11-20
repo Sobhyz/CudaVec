@@ -7,3 +7,5 @@ hello_cuda
 *.exe
 .cache/
 compile_commands.json
+data/
+.venv/
