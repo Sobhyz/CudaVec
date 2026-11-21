@@ -49,13 +49,13 @@ VecDB::VecDB(std::vector<float> const &db, std::size_t dim){
 }
 
 std::size_t VecDB::get_dimensions() const noexcept {
-    return dimensions;
+    return this->dimensions;
 }
 
 std::size_t VecDB::size() const noexcept {
-    return db.size() / dimensions;
+    return this->db.size() / this->dimensions;
 }
 
 const std::vector<float>& VecDB::data() const noexcept {
-    return db;
+    return this->db;
 }

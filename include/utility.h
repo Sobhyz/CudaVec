@@ -27,10 +27,10 @@ struct BenchmarkDataset{
         std::size_t num_queries=0;
         std::size_t ground_truth_k=0;
         std::vector<float> read_database();
-        void build_database();
         void load_metadata();
         void load_queries();
         void load_ground_truth();
+        void build_database();
         
 
     public:

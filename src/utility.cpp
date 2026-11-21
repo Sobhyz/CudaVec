@@ -73,6 +73,9 @@ BenchmarkDataset::BenchmarkDataset(std::string const &db_path){
 
     this->database_path = db_path;
     this->load_metadata();
+    this->build_database();
+    this->load_queries();
+    this->load_ground_truth();
 }
 
 void BenchmarkDataset::load_metadata(){
@@ -104,4 +107,103 @@ std::vector<float> BenchmarkDataset::read_database(){
     );
 }
 
+void BenchmarkDataset::load_queries(){
+    std::size_t query_elements = this->files_data.at("test").at("elements").get<std::size_t>();
+    bool conf_check = query_elements % this->dimensions != 0;
 
+    if(conf_check)throw std::runtime_error("check conf.");
+
+    std::vector<float> tmp(load_data<float>(
+            this->database_path / "queries.f32",
+            query_elements
+        ));
+
+    this->query.swap(
+            tmp
+    );
+}
+
+void BenchmarkDataset::load_ground_truth(){
+    std::size_t neighbors_elements = this->files_data.at("neighbors").at("elements").get<std::size_t>();
+    std::size_t distances_elements = this->files_data.at("distances").at("elements").get<std::size_t>();
+    
+    if (this->num_queries > std::numeric_limits<std::size_t>::max() / this->ground_truth_k)
+        throw std::runtime_error("Ground truth size overflow");
+    bool conf_check = (neighbors_elements!=distances_elements)
+        ||  (this->num_queries *this->ground_truth_k != neighbors_elements);
+
+    if(conf_check)throw std::runtime_error("check conf.");
+    
+    std::vector<std::int32_t> tmp_n(
+        load_data<std::int32_t>(
+            this->database_path / "neighbors.i32",
+            neighbors_elements
+        )
+    );
+    for (std::int32_t index : tmp_n) {
+        if (index < 0 ||
+            static_cast<std::size_t>(index) >= this->db->size()) {
+            throw std::runtime_error(
+                "Ground-truth neighbor index outside database bounds"
+            );
+        }
+    }
+
+    std::vector<float> tmp_dist(
+        load_data<float>(
+            this->database_path / "distances.f32",
+            distances_elements
+        )
+    );
+
+    this->ground_truth.swap(
+            tmp_n
+    );
+    this->distance_ground_truth.swap(
+            tmp_dist
+    );
+}
+
+void BenchmarkDataset::build_database(){
+    std::vector<float> tmp(
+        this->read_database()
+    );
+    VecDB tmp_db(tmp, this->dimensions);
+    this->db = std::make_unique<VecDB>(tmp_db);
+    
+}
+
+VecDB const& BenchmarkDataset::get_database() const{
+    return *(this->db);
+}
+
+std::vector<float>::const_iterator BenchmarkDataset::get_query(std::size_t index) const{
+    if(index >= this->num_queries)
+        throw std::runtime_error("Out of bound index");
+    return this->query.begin() + (index * this->dimensions);
+}
+
+std::vector<std::int32_t>::const_iterator BenchmarkDataset::get_ground_truth(std::size_t index) const{
+    if(index >= this->ground_truth.size() / this->ground_truth_k)
+        throw std::runtime_error("Out of bound index");
+
+    return this->ground_truth.begin() + (index * this->ground_truth_k);
+}
+
+std::vector<float>::const_iterator BenchmarkDataset::get_distance_ground_truth(std::size_t index) const{
+    if(index >= this->distance_ground_truth.size() / this->ground_truth_k)
+        throw std::runtime_error("Out of bound index");
+
+    return this->distance_ground_truth.begin() + (index * this->ground_truth_k);
+}
+
+
+std::size_t BenchmarkDataset::get_num_queries() const{
+    return this->num_queries;
+}
+std::size_t BenchmarkDataset::get_dimensions() const{
+    return this->dimensions;
+}
+std::size_t BenchmarkDataset::get_ground_truth_k() const{
+    return this->ground_truth_k;
+}

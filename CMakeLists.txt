@@ -66,6 +66,14 @@ target_link_libraries(test_similarity
     PRIVATE cudavec_core
 )
 
+add_executable(test_benchmark_dataset
+    tests/test_benchmark_dataset.cpp
+)
+
+target_link_libraries(test_benchmark_dataset
+    PRIVATE cudavec_core
+)
+
 # Enable CTest
 include(CTest)
 
@@ -80,5 +88,11 @@ if(BUILD_TESTING)
     add_test(
         NAME SimilarityTests
         COMMAND test_similarity
+    )
+endif()
+if(BUILD_TESTING)
+    add_test(
+        NAME BenchmarkDatasetTests
+        COMMAND test_benchmark_dataset
     )
 endif()
