@@ -34,6 +34,15 @@ target_link_libraries(cudavec_core
         nlohmann_json::nlohmann_json
 )
 
+# CPU Search Benchmark
+add_executable(cpu_search
+    src/cpu_search.cpp
+)
+
+target_link_libraries(cpu_search
+    PRIVATE cudavec_core
+)
+
 # Public headers
 target_include_directories(cudavec_core
     PUBLIC

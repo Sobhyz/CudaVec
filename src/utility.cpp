@@ -67,7 +67,7 @@ std::vector<T> load_data(
 
 }
 
-BenchmarkDataset::BenchmarkDataset(std::string const &db_path){
+BenchmarkDataset::BenchmarkDataset(std::filesystem::path const& db_path){
     if(!std::filesystem::is_directory(db_path))
         throw std::runtime_error("invalid directory path");
 

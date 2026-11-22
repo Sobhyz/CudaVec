@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/cpu_search.dir/link.d CMakeFiles/cpu_search.dir/src/cpu_search.cpp.o -o cpu_search  libcudavec_core.a

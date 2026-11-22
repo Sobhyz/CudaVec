@@ -34,7 +34,7 @@ struct BenchmarkDataset{
         
 
     public:
-        BenchmarkDataset(std::string const &db_path);
+        BenchmarkDataset(std::filesystem::path const& db_path);
 
         VecDB const& get_database() const;
         std::vector<float>::const_iterator  get_query(std::size_t index) const;

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcudavec_core.a CMakeFiles/cudavec_core.dir/src/vector_dataset.cpp.o CMakeFiles/cudavec_core.dir/src/similarity.cpp.o CMakeFiles/cudavec_core.dir/src/utility.cpp.o
+/usr/bin/ranlib libcudavec_core.a
