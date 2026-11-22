@@ -9,3 +9,4 @@ hello_cuda
 compile_commands.json
 data/
 .venv/
+build-release/
